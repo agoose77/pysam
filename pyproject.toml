@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "pysam"
+version = "0.1.0"
+description = ""
+authors = ["Angus Hollands <goosey15@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "3.6.5"
+quart = "^0.6.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.5"
