@@ -1,8 +1,8 @@
 import asyncio
 from functools import wraps
 
-from quart import copy_current_websocket_context
 from model import ModelData, COUNTER_MAX
+from quart import copy_current_websocket_context
 
 
 def ensure_future_with_ws_ctx(coro_fun):
@@ -17,10 +17,12 @@ def ensure_future_with_ws_ctx(coro_fun):
 
 
 class State:
-    """3. State function computes the State Representation from the Model property values and makes sure that everyone
-    who needs to "learn"" about the new application state is notified, such as the view which will display the
-    “state representation”.
-    Then computes the next-action-predicate which will invoke any automatic action, given the current application state
+    """3. State function computes the State Representation from the Model values, and ensures that components which
+    need to learn about the new application state are notified, such as the view (which will display the
+    “state representation”).
+    Then computes the next-action-predicate which will invoke any automatic action, given the current application state.
+    This example contains state machine methods (pure model functions) e.g counting, ready, ... which compute additional
+    data from the model (to keep model simple and containing only the essential properties).
     """
 
     def __init__(self, view, actions):
@@ -57,6 +59,7 @@ class State:
                 ensure_future_with_ws_ctx(self.actions.launch)(ModelData())
 
     async def render(self, model):
+        """Render model to view and compute next action predicate"""
         await self.representation(model)
         await self.next_action_predicate(model)
 
