@@ -1,70 +1,67 @@
 <html>
-    <head>
+<head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://rawgit.com/jbloemendal/jquery-simple-websocket/master/src/jquery.simple.websocket.js"></script>
 
     <script type="text/javascript">
         var socket = new WebSocket("ws://127.0.0.1:5000/ws");
-        socket.onopen = function(){
+        socket.onopen = function () {
             console.log("Opened WS");
         }
 
 
-        socket.onmessage = function(event){
+        socket.onmessage = function (event) {
             display(event.data);
         }
 
-        var actions = {} ;
+        var actions = {};
 
         function present(data) {
             console.log("Sending WS data", data);
             socket.send(JSON.stringify(data));
         }
 
-        function display(html)
-        {
+        function display(html) {
             $("#representation").html(html);
             console.log("display " + html);
         }
 
 
-        $(document).ready(function() {
+        $(document).ready(function () {
         });
 
         var voices = null;
 
         // Load voices
-        var timer = setInterval(function() {
+        var timer = setInterval(function () {
             voices = speechSynthesis.getVoices();
             console.log(voices);
             if (voices.length !== 0) {
-              clearInterval(timer);
+                clearInterval(timer);
             }
         }, 200);
 
-        actions.start = function(data) {
-            data.started = true ;
-            present(data) ;
-            return false ;
+        actions.start = function (data) {
+            data.started = true;
+            present(data);
+            return false;
         }
 
 
-        actions.abort = function(data) {
-            data.aborted = true ;
-            present(data) ;
-            return false ;
+        actions.abort = function (data) {
+            data.aborted = true;
+            present(data);
+            return false;
         }
 
-        function say(message)
-        {
+        function say(message) {
             var msg = new SpeechSynthesisUtterance(message);
             msg.rate = 1.1;
 
             var name = "Google UK English Male";
 
-            for(i = 0; i < voices.length ; i++) {
-                if(voices[i].name === name) {
-                  msg.voice = voices[i];
+            for (i = 0; i < voices.length; i++) {
+                if (voices[i].name === name) {
+                    msg.voice = voices[i];
                 }
             }
             console.log(voices.length);
@@ -76,8 +73,8 @@
 
     </script>
 
-    </head>
-    <body>
-        <div id="representation"></div>
-    </body>
+</head>
+<body>
+<div id="representation"></div>
+</body>
 </html>
